@@ -1,0 +1,15 @@
+{
+  "name": "fastify",
+  "version": "1.0.0",
+  "description": "Curso fastify",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Maximiliano Naveillan",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^5.2.2"
+  }
+}

@@ -1,0 +1,32 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+
+# Logs
+logs
+*.log
+logs/*.log
+
+# IDEs/Editors
+.vscode/
+.idea/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Dependencias de Python (si aplicas)
+__pycache__/
+*.py[cod]
+*.venv/
+.venv/
+
+# Build outputs
+dist/
+build/
+
+# Git
+.git/
