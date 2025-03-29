@@ -378,70 +378,45 @@ Con estas rutas definidas, el servidor podrá manejar las siguientes solicitudes
 
 # <div align="center">Ciclo de Vida Interno de Fastify</div>
 
----
+## consulta la [documentación oficial de Fastify](https://fastify.dev/docs/latest/Reference/Lifecycle/#lifecycle).
 
 Este esquema describe el ciclo de vida de una solicitud en Fastify, desde la solicitud entrante hasta la respuesta saliente, y muestra cómo se manejan los errores en cada fase.
 
 ## Fases del Ciclo de Vida
 
-1. **Incoming Request (Solicitud Entrante)**  
-   La solicitud llega a Fastify y comienza el proceso de enrutamiento.
-
-2. **Routing (Enrutamiento)**  
-   La solicitud se enruta según las rutas definidas.
-
-3. **Instance Logger (Registro de la Instancia)**  
-   Fastify registra información sobre la solicitud.
-
-4. **onRequest Hook**  
-   Permite ejecutar lógica antes de procesar la solicitud.
-
-   - **Error:** 4xx/5xx si falla.
-
-5. **preParsing Hook**  
-   Procesa la solicitud antes del análisis.
-
-   - **Error:** 4xx/5xx si falla.
-
-6. **Parsing (Análisis)**  
-   Fastify analiza la solicitud.
-
-   - **Error:** 4xx/5xx si falla.
-
-7. **preValidation Hook**  
-   Se ejecuta antes de la validación de datos.
-
-   - **Error:** 4xx/5xx si falla.
-
-8. **Validation (Validación)**  
-   Valida el esquema JSON de la solicitud.
-
-   - **Error:** 400 si falla.
-
-9. **preHandler Hook**  
-   Lógica adicional antes de llamar al manejador principal.
-
-   - **Error:** 4xx/5xx si falla.
-
-10. **User Handler (Manejador de Usuario)**  
-    Procesa la lógica principal de la solicitud.
-
-11. **Reply (Respuesta)**  
-    Fastify envía la respuesta al cliente.
-
-12. **preSerialization Hook**  
-    Serializa la respuesta antes de enviarla.
-
-    - **Error:** 4xx/5xx si falla.
-
-13. **onSend Hook**  
-    Permite modificar la respuesta antes de enviarla.
-
-14. **Outgoing Response (Respuesta Saliente)**  
-    La respuesta sale del servidor.
-
-15. **onResponse Hook**  
-    Ejecuta lógica final tras enviar la respuesta.
+<pre style="overflow: scroll;">
+<div style="width:800px;">
+Incoming Request
+  │
+  └─▶ Routing
+        │
+        └─▶ Instance Logger
+             │
+   4**/5** ◀─┴─▶ onRequest Hook
+                  │
+        4**/5** ◀─┴─▶ preParsing Hook
+                        │
+              4**/5** ◀─┴─▶ Parsing
+                             │
+                   4**/5** ◀─┴─▶ preValidation Hook
+                                  │
+                            400 ◀─┴─▶ Validation
+                                        │
+                              4**/5** ◀─┴─▶ preHandler Hook
+                                              │
+                                    4**/5** ◀─┴─▶ User Handler
+                                                    │
+                                                    └─▶ Reply
+                                                          │
+                                                4**/5** ◀─┴─▶ preSerialization Hook
+                                                                │
+                                                                └─▶ onSend Hook
+                                                                      │
+                                                            4**/5** ◀─┴─▶ Outgoing Response
+                                                                            │
+                                                                            └─▶ onResponse Hook
+                                                                            </div>
+</pre>
 
 ---
 
