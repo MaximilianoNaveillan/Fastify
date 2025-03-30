@@ -23,5 +23,6 @@ rutas.forEach((ruta) => {
 try {
   fastify.listen({ port: 3000 });
 } catch (erro) {
-  console.log(erro);
+  fastify.log.error(erro);
+  process.exit(1);
 }
