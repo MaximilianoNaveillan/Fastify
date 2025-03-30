@@ -1,4 +1,4 @@
-# Fastify: Framework Rápido y Eficiente para Node.js
+# Clase tutorial Fastify
 
 Fastify es un framework web rápido y eficiente para Node.js, diseñado para crear aplicaciones web y APIs RESTful con un enfoque en el rendimiento y bajo consumo de recursos. Es conocido por ser **ligero, altamente extensible, compatible con plugins, y muy rápido en comparación con otros frameworks como Express**.
 
@@ -9,88 +9,6 @@ Fastify es un framework web rápido y eficiente para Node.js, diseñado para cre
 - **Extensible**: Sistema de plugins similar a Express y Hapi, lo que facilita la reutilización de código.
 - **Ecosistema rico**: Soporte para WebSockets, autenticación JWT, Swagger, y más.
 - **Soporte para TypeScript**: Con tipos incorporados y mejor compatibilidad.
-
----
-
-## Instalación:
-
-Para comenzar con Fastify:
-
-```bash
-npm install fastify
-```
-
-## Ejemplo básico:
-
-```javascript
-// Importar Fastify
-const fastify = require("fastify")({ logger: true });
-
-// Definir una ruta básica
-fastify.get("/", async (request, reply) => {
-  return { hello: "world" };
-});
-
-// Iniciar el servidor
-const start = async () => {
-  try {
-    await fastify.listen({ port: 3000 });
-    console.log("Servidor escuchando en http://localhost:3000");
-  } catch (err) {
-    fastify.log.error(err);
-    process.exit(1);
-  }
-};
-start();
-```
-
-## Validación de datos:
-
-Fastify permite validar datos usando JSON Schema:
-
-```javascript
-fastify.post(
-  "/user",
-  {
-    schema: {
-      body: {
-        type: "object",
-        required: ["name", "age"],
-        properties: {
-          name: { type: "string" },
-          age: { type: "integer" },
-        },
-      },
-    },
-  },
-  async (request, reply) => {
-    return { status: "Usuario creado", data: request.body };
-  }
-);
-```
-
-Si los datos no cumplen con el esquema definido, Fastify devolverá automáticamente un error.
-
-## Plugins populares:
-
-- **@fastify/jwt**: Autenticación basada en JSON Web Tokens.
-- **@fastify/swagger**: Generación automática de documentación Swagger/OpenAPI.
-- **@fastify/cors**: Gestión de CORS (Cross-Origin Resource Sharing).
-- **@fastify/multipart**: Soporte para manejar archivos y formularios multipart.
-
----
-
-## Instalación de un plugin:
-
-```bash
-npm install @fastify/jwt
-```
-
-## Uso del plugin:
-
-```javascript
-fastify.register(require("@fastify/jwt"), { secret: "supersecret" });
-```
 
 ## Comparación con Express:
 
@@ -103,53 +21,54 @@ fastify.register(require("@fastify/jwt"), { secret: "supersecret" });
 
 # Tutorial : Servidor básico con Fastify
 
-## 1 .- Configuración
+## 1 .- Instalación:
 
-### Uso de `"type": "module"` en Fastify
+Para comenzar con Fastify:
 
-Usar "type": "module" permite aprovechar la sintaxis moderna de JavaScript, mejora la compatibilidad con los estándares ECMAScript y optimiza el rendimiento futuro del proyecto.
-
-### Ventajas:
-
-1. **Sintaxis moderna de import/export**:
-
-   - Permite usar:
-     ```javascript
-     import fastify from "fastify";
-     ```
-   - En lugar de:
-     ```javascript
-     const fastify = require("fastify");
-     ```
-
-2. **Estándar ECMAScript**:  
-   Compatible tanto con el navegador como con Node.js.
-
-3. **Mejor optimización**:  
-   ESM permite optimizaciones en Node.js.
-
-4. **Manejo de dependencias asíncronas**:  
-   Admite `top-level await` para importar módulos asíncronos.
-
-### Cambios al usar `"type": "module"`:
-
-- Los archivos deben tener extensión `.js` (o `.mjs` si no configuras `package.json`).
-- No puedes usar `require`, solo `import`.
-
-### Ejemplo de configuración:
-
-**Archivo `package.json`:**
-
-```json
-{
-  "name": "my-fastify-app",
-  "type": "module",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  }
-}
+```bash
+npm install fastify
 ```
+
+## 2 .- Configuración
+
+> [!NOTE]
+>
+> ### Se recomienda el uso de `"type": "module"` en l configuración del proyecto
+>
+> Usar "type": "module" permite aprovechar la sintaxis moderna de JavaScript, mejora la compatibilidad con los estándares ECMAScript y optimiza el rendimiento futuro del proyecto.
+>
+> ### Ventajas:
+>
+> - **Sintaxis moderna de import/export**:
+>   - Permite usar:
+>     ```javascript
+>     import fastify from "fastify";
+>     ```
+>   - En lugar de:
+>     ```javascript
+>     const fastify = require("fastify");
+>     ```
+> - **Estándar ECMAScript**:  
+>   Compatible tanto con el navegador como con Node.js.
+> - **Mejor optimización**:  
+>   ESM permite optimizaciones en Node.js.
+> - **Manejo de dependencias asíncronas**:  
+>   Admite `top-level await` para importar módulos asíncronos.
+>
+> ### Ejemplo de configuración:
+>
+> **Archivo `package.json`:**
+>
+> ```json
+> {
+>   "name": "my-fastify-app",
+>   "type": "module",
+>   "main": "index.js",
+>   "scripts": {
+>     "start": "node index.js"
+>   }
+> }
+> ```
 
 ## Comparación de código: Con y sin `"type": "module"`
 
@@ -171,7 +90,8 @@ fastify.get("/", async (req, res) => {
 try {
   fastify.listen({ port: 3000 });
 } catch (erro) {
-  console.log(erro);
+  fastify.log.error(erro);
+  process.exit(1);
 }
 ```
 
@@ -181,7 +101,7 @@ try {
 // Importar Fastify
 const Fastify = require("fastify");
 
-const fastify = Fastify();
+const fastify = Fastify({ logger: true });
 
 // Definir una ruta básica
 fastify.get("/", async (req, res) => {
@@ -202,23 +122,6 @@ const start = async () => {
 start();
 ```
 
-## Diferencias clave entre con y sin `"type": "module"`
-
-### **Sintaxis de importación**:
-
-- **Con `"type": "module"`**: Usamos `import Fastify from 'fastify';`.
-- **Sin `"type": "module"`**: Usamos `const Fastify = require('fastify');`.
-
-### **Uso de `await`**:
-
-- **Con `"type": "module"`**: Se puede usar `await` directamente en el nivel superior (fuera de funciones).
-- **Sin `"type": "module"`**: `await` debe ser usado dentro de una función asíncrona, por lo que es necesario envolverlo en una función (como en `start()`).
-
-### **Estructura del código**:
-
-- **Con `"type": "module"`**: El código es más directo, sin necesidad de envolver el `await` en una función.
-- **Sin `"type": "module"`**: La función `start()` se convierte en una envoltura para el código asíncrono.
-
 ### **Conclución**:
 
 - **Con `"type": "module"`**: Se aprovechan las características modernas de ES6, como `import` y `await` a nivel superior.
@@ -228,9 +131,17 @@ start();
 
 ## 2.- Creación del archivo index
 
-Este paso incluye la configuración inicial de un servidor básico con Fastify. El archivo `index.js` será el punto de entrada principal de la aplicación.
+Este paso incluye la configuración inicial de un servidor básico con Fastify. El archivo `index.js` dentro de la carpeta SRC., será el punto de entrada principal de la aplicación.
 
-## Código
+```
+fastify-tutorial/
+├── src/
+│   ├── index.js
+├── package.json
+└── ...otros archivos (node_modules, etc.)
+```
+
+## Código :SRC/index.js
 
 ```javascript
 // Importar Fastify
@@ -258,7 +169,8 @@ rutas.forEach((ruta) => {
 try {
   fastify.listen({ port: 3000 });
 } catch (erro) {
-  console.log(erro);
+  fastify.log.error(erro); // El logging de Fastify guarda el error e de inicio del servidor
+  process.exit(1);
 }
 ```
 
@@ -384,8 +296,7 @@ Este esquema describe el ciclo de vida de una solicitud en Fastify, desde la sol
 
 ## Fases del Ciclo de Vida
 
-<pre style="overflow: scroll;">
-<div style="width:800px;">
+```
 Incoming Request
   │
   └─▶ Routing
@@ -415,8 +326,23 @@ Incoming Request
                                                             4**/5** ◀─┴─▶ Outgoing Response
                                                                             │
                                                                             └─▶ onResponse Hook
-                                                                            </div>
-</pre>
+```
+
+1.  **Recepción:** Llega la solicitud.
+2.  **Enrutamiento:** Se elige la ruta.
+3.  **Pre-Procesamiento:**
+    - `onRequest` Hook
+    - `preParsing` Hook
+    - Parsing y validación
+    - `preValidation` Hook
+    - `preHandler` Hook
+4.  **Manejo:** Se ejecuta el `User Handler`.
+5.  **Respuesta:**
+    - Se construye la `Reply`.
+    - `preSerialization` Hook
+    - `onSend` Hook
+6.  **Envío:** Se envía la respuesta.
+7.  **Post-Procesamiento:** `onResponse` Hook.
 
 ---
 
@@ -430,20 +356,28 @@ Durante o antes del **User Handler**, se puede llamar a `reply.hijack()` para ev
 - **Sincrónico:** Envía una carga útil o lanza una instancia de `Error`.
 - Si la respuesta es pirateada, se omiten los pasos restantes.
 
----
-
 ## Flujo de Manejo de Errores
 
-1. **Validación del Esquema:**
+```
+                        ★ schema validation Error
+                                    │
+                                    └─▶ schemaErrorFormatter
+                                               │
+                          reply sent ◀── JSON ─┴─ Error instance
+                                                      │
+                                                      │         ★ throw an Error
+                     ★ send or return                 │                 │
+                            │                         │                 │
+                            │                         ▼                 │
+       reply sent ◀── JSON ─┴─ Error instance ──▶ setErrorHandler ◀─────┘
+                                                      │
+                                 reply sent ◀── JSON ─┴─ Error instance ──▶ onError Hook
+                                                                                │
+                                                                                └─▶ reply sent
+```
 
-   - Si hay un error, pasa a `schemaErrorFormatter` para procesarlo.
+### Resultados Posibles en el Manejador:
 
-2. **Gestión de Errores:**
-
-   - La carga útil o instancia de error sigue el flujo hacia `setErrorHandler` y el **onError Hook**.
-
-3. **Serialización de la Respuesta:**  
-   La respuesta JSON será serializada por:
-   - Un serializador personalizado, si está configurado.
-   - El compilador del serializador, si hay un esquema JSON.
-   - `JSON.stringify`, si no hay otra configuración.
+- **Asíncrono:** Devuelve una carga útil o lanza un error.
+- **Sincrónico:** Envía una carga útil o lanza una instancia de `Error`.
+- Si la respuesta es pirateada, se omiten los pasos restantes.
